@@ -213,7 +213,6 @@ class RegeditEdit:
 ULONG_PTR = c_ulong if ctypes.sizeof(ctypes.c_void_p) == 4 else ctypes.c_ulonglong
 
 # https://stackoverflow.com/questions/62189991/how-to-wrap-the-sendinput-function-to-python-using-ctypes
-# i add pyautogui but its create so huge exe file 
 class KEYBDINPUT(ctypes.Structure):
     _fields_ = [('wVk' ,w.WORD),
                 ('wScan',w.WORD),
