@@ -59,7 +59,6 @@ def SetPrivilege(privilege_name, enable=True):
     else:
         print("Ayrıcalık başarıyla ayarlandı.")
 
-# Kullanmak istediğiniz ayrıcalığın adını ve işlemi belirtin
 def set_as_critic():
     privilege_name = "SeDebugPrivilege"
     SetPrivilege(privilege_name, enable=True)  # Ayrıcalığı etkinleştirme
