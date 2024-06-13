@@ -1,6 +1,6 @@
 import os
 import subprocess
-class handlers:
+class ProcessType:
     @staticmethod
     def open_hide_process(args: str) -> bool:
         process_startup_info = subprocess.STARTUPINFO()
@@ -10,7 +10,7 @@ class handlers:
             proces = subprocess.Popen(args,startupinfo=process_startup_info,creationflags=subprocess.CREATE_NO_WINDOW)
         except Exception:
             return False
-        return True
+        return proces
     @staticmethod
     def open_process(args: str) -> bool:
         """
@@ -23,30 +23,22 @@ class handlers:
         return proc
     @staticmethod
     def system(command: str):
-        class out:
-            """
-            for output data
-            """
-            is_succes = False
-            exc = "" #for exception
-        out = out()
         try:
             os.system(command)
-            out.is_succes = True
         except Exception as e:
-            out.exc = str(e)
-        return out
+            return False
+        return True
 class Process:
     def __init__(self):
         self._command = "cmd.exe"
         self._parameter = ""
-        self._process_type = handlers.open_process
+        self._process_type = ProcessType.open_process
     @property
     def command(self) -> str:
         return self._command
     @command.setter
     def command(self,value: str):
-        if isinstance(value,"str"):
+        if isinstance(value,str):
             self._command = value
     @property
     def parameter(self):
@@ -57,10 +49,10 @@ class Process:
             self._parameter = pvalue
     @property
     def process_type(self):
-
         return self._process_type
     @process_type.setter
     def process_type(self,ptype_value: type) -> type:
-        return self._process_type
+        if ptype_value.__class__.__name__ == "function":
+            self._process_type = ptype_value
     def exec(self) -> bool:
-        return self._process_type(self.command + self.parameter)
+        return self._process_type(self.command + " " + self.parameter)

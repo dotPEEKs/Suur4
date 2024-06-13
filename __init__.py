@@ -19,3 +19,7 @@ def get_path(*args) -> str:
     return os.path.join(path,*args)
 def lib_path(*args):
     return os.path.join(os.path.dirname(__file__),*args)
+def get_exe_assets(*args):
+    return os.path.join(os.path.dirname(pathlib.Path(os.path.dirname(__file__)).resolve()),*args)
+def get_dir_path():
+    return os.path.dirname(__file__)
