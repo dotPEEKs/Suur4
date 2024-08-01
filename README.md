@@ -1,8 +1,6 @@
-# Bu bir tür malware yazılımının kodudur
+# Bu bir tür kendi yazdığım malware yazılımının kodudur
 # NOT:Direkt olarak çalıştırıp exe'ye çeviremezsiniz güvenlik amacıyla main scripti kaldırdım ve tehlikeli kısmı sildim 
-# NOT:Bu yazılımı dağıtmak gerçek bir bilgisayarda çalıştırmak son derece tehlikeli olabilir unutmayın bu yazılım kesinlikle zarar vermek ve bozmak amacıyla yapılmamıştır
-# Kendi bilgisayarınızda derleyip çalıştırdıktan sonra programın vereceği/verebileceği zarardan **KESİNLİKLE* ve **KESİNLİKLE** şahsım sorumlu değildir,tutulmayacaktırda
-# Yazılım sizin aktivitelerinizi takip edicektir kesinlikle bu ve bu gibi kelimeleri sakın tarayıcılarda aratmayınız
+# Bu kod eğitim amaçlı public olarak bırakılmıştır
 > görev yöneticisi
 
 > kaspersky indir
