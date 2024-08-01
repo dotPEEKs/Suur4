@@ -1,7 +1,6 @@
 import ctypes
 from ctypes import wintypes
-user32 = ctypes.windll.user32
-from Suura.includes.util import getHwnd,GetDC
+from Suura.includes.util import getHwnd,GetDC,user32
 class Screen:
     SCREEN_X = user32.GetSystemMetrics(0) # it's defining X position
     SCREEN_Y = user32.GetSystemMetrics(1) # it's defining Y position
