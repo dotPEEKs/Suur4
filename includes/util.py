@@ -260,9 +260,9 @@ def unsign_data(data: bytes) -> bytes:
     try:
         pad_size = struct.unpack(">I",data[:4])[0]
         chunk = data[pad_size+big_endian_size:]
-        return chunk
     except:
         return b"BAD_SIGNATURE"
+    return chunk
 
 def is_running_wmware():
     wmi_ = wmi.WMI().Win32_ComputerSystem()[0]
