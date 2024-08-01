@@ -89,7 +89,6 @@ class WindowProtection:
         if func_name.__class__.__name__ in ("method","function"): #only allowed methods and functions
             self._call_back_func = func_name
     def _handler(self):
-        print("I am working god dammit")
         while True:
             for black_listed_window_ in self.blacklisted_titles:
                 window_title = GetCurrentWindowTitle()
